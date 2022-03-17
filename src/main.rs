@@ -40,11 +40,12 @@ fn main() {
     //         }
     //     }
     // }
-    if Confirm::new().with_prompt("Do you want to continue?").interact().unwrap() {
-        println!("Looks like you want to continue");
-    } else {
-        println!("nevermind then :(");
-    }
+
+    // if Confirm::new().with_prompt("Do you want to continue?").interact().unwrap() {
+    //     println!("Looks like you want to continue");
+    // } else {
+    //     println!("nevermind then :(");
+    // }
 
     // let items = vec!["Option 1", "Option 2"];
     // let chosen : Vec<usize> = MultiSelect::new()
@@ -55,7 +56,6 @@ fn main() {
     //         println!("You chose: {}", items[item]);
     //     }
 
-
     //original file
     let mut original_file_path = String::new();
     // println!("Please input the file path:");
@@ -63,9 +63,14 @@ fn main() {
     //     .read_line(&mut original_file_path)
     //     .expect("Failed to read line");
 
-        original_file_path = file_opretaions::file_opretaions::read_original_file_path(
-        &original_file_path, "Please input the file path:"
+    original_file_path = file_opretaions::file_opretaions::read_original_file_path(
+        &original_file_path,
+        "Please input the file path:",
     );
+
+    if !original_file_path.ends_with("\\") {
+        original_file_path.push('\\');
+    }
     println!("original_file_path is: {}", original_file_path);
     let path = Path::new(original_file_path.trim());
 
@@ -75,15 +80,42 @@ fn main() {
     let mut files: Vec<String> = Vec::new();
 
     for file in folder_content {
-        files.push(file.unwrap().path().display().to_string());
+        //files.push(file.unwrap().path().display().to_string());
+        files.push(
+            file.unwrap()
+                .file_name()
+                .to_string_lossy()
+                .into_owned()
+                .to_string(),
+        );
+        //println!("File path is: {}", file.unwrap().file_name().to_string_lossy());
     }
 
-    let chosen : Vec<usize> = MultiSelect::new()
-    .items(&files)
-    .interact().unwrap();
+    let chosen: Vec<usize> = MultiSelect::new().items(&files).interact().unwrap();
+
+    //copy to
+    let mut copy_file_path = String::new();
+    //println!("Please input where to copy path:");
+    copy_file_path = file_opretaions::file_opretaions::read_original_file_path(
+        &copy_file_path,
+        "Please input where to copy path:",
+    );
 
     for item in chosen {
-        println!("You chose: {}", files[item]);
+        //println!("You chose: {}", files[item]);
+        //build original file path including file name
+        let full_original_path = path.join(files[item].trim());
+
+        //build copy file path including file name
+        let new_file_path: String =
+            [copy_file_path.to_string(), files[item].to_string()].join("\\");
+        //println!("new file path: {}", new_file_path);
+
+        let copy_result = fs::copy(full_original_path, new_file_path.trim());
+        match copy_result {
+            Ok(_) => println!("File copied successfully"),
+            Err(error) => println!("Error: {}", error),
+        }
     }
     //println!("Path is: {}", path.display());
     // println!("Parent path is: {}", path.parent().unwrap().display());
@@ -94,22 +126,16 @@ fn main() {
     //     println!("{}", path_file.unwrap().path().display());
     // }
 
-    //copy to
-    let mut copy_file_path = String::new();
-    //println!("Please input where to copy path:");
-    copy_file_path = file_opretaions::file_opretaions::read_original_file_path(
-        &copy_file_path, "Please input where to copy path:"
-    );
     // io::stdin()
     //     .read_line(&mut copy_file_path)
     //     .expect("Failed to read line");
 
-    //let copy_result = fs::copy("hello.txt", "hello_copy.txt");
-    let copy_result = fs::copy(original_file_path.trim(), copy_file_path.trim());
-    match copy_result {
-        Ok(_) => println!("File copied successfully"),
-        Err(error) => println!("Error: {}", error),
-    }
+    // //let copy_result = fs::copy("hello.txt", "hello_copy.txt");
+    // let copy_result = fs::copy(original_file_path.trim(), copy_file_path.trim());
+    // match copy_result {
+    //     Ok(_) => println!("File copied successfully"),
+    //     Err(error) => println!("Error: {}", error),
+    // }
 
     //println!("Copy result: {}", copy_result.is_ok());
 }
