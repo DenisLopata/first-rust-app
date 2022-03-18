@@ -8,27 +8,33 @@ fn main() {
     //original file
     let mut original_file_path = String::new();
 
+    // iterrate till directory path is given
+    // if not directory repeat user input
+    let result_path = loop {
+        original_file_path = file_opretaions::file_opretaions::read_file_path(
+            &original_file_path,
+            "Please input the origin folder path:",
+        );
 
-    
-    original_file_path = file_opretaions::file_opretaions::read_file_path(
-        &original_file_path,
-        "Please input the origin folder path:",
-    );
+        if !original_file_path.ends_with("\\") {
+            original_file_path.push('\\');
+        }
+        println!("original_file_path is: {}", original_file_path);
 
-    if !original_file_path.ends_with("\\") {
-        original_file_path.push('\\');
-    }
+        let path = Path::new(original_file_path.trim());
+        if !path.is_dir() {
+            println!("Path is not a directory dum dum");
+            println!("Please eneter a valid directory path");
+            original_file_path.clear();
+        } else {
+            break path;
+        }
+    };
 
-    println!("original_file_path is: {}", original_file_path);
-
-    let path = Path::new(original_file_path.trim());
-    if !path.is_dir() {
-        println!("Path is not a directory dum dum");
-        println!("I crash now");
-    }
+    println!("result is: {}", result_path.display().to_string());
 
     //read directory content
-    let folder_content = fs::read_dir(path).unwrap();
+    let folder_content = fs::read_dir(result_path).unwrap();
 
     let mut files: Vec<String> = Vec::new();
 
@@ -53,7 +59,7 @@ fn main() {
 
     for item in chosen {
         //build original file path including file name
-        let full_original_path = path.join(files[item].trim());
+        let full_original_path = result_path.join(files[item].trim());
 
         //build copy file path including file name
         let new_file_path: String =
