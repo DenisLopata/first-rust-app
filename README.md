@@ -1,4 +1,4 @@
-#this is a sample rust project
+# this is a sample rust project
 
 ## What does it do?
 
