@@ -4,7 +4,7 @@ use std::path::Path;
 // use std::cmp::Ordering;
 use std::fs;
 //use std::io;
-use dialoguer::Confirm;
+//use dialoguer::Confirm;
 use dialoguer::MultiSelect;
 
 mod file_opretaions;
@@ -63,7 +63,7 @@ fn main() {
     //     .read_line(&mut original_file_path)
     //     .expect("Failed to read line");
 
-    original_file_path = file_opretaions::file_opretaions::read_original_file_path(
+    original_file_path = file_opretaions::file_opretaions::read_file_path(
         &original_file_path,
         "Please input the file path:",
     );
@@ -96,7 +96,7 @@ fn main() {
     //copy to
     let mut copy_file_path = String::new();
     //println!("Please input where to copy path:");
-    copy_file_path = file_opretaions::file_opretaions::read_original_file_path(
+    copy_file_path = file_opretaions::file_opretaions::read_file_path(
         &copy_file_path,
         "Please input where to copy path:",
     );
@@ -117,6 +117,10 @@ fn main() {
             Err(error) => println!("Error: {}", error),
         }
     }
+
+    file_opretaions::file_opretaions::wait_user_input_message(
+        "We done! We the best!",
+    );
     //println!("Path is: {}", path.display());
     // println!("Parent path is: {}", path.parent().unwrap().display());
 
