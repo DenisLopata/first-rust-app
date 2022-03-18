@@ -8,9 +8,11 @@ fn main() {
     //original file
     let mut original_file_path = String::new();
 
+
+    
     original_file_path = file_opretaions::file_opretaions::read_file_path(
         &original_file_path,
-        "Please input the file path:",
+        "Please input the origin folder path:",
     );
 
     if !original_file_path.ends_with("\\") {
@@ -18,7 +20,12 @@ fn main() {
     }
 
     println!("original_file_path is: {}", original_file_path);
+
     let path = Path::new(original_file_path.trim());
+    if !path.is_dir() {
+        println!("Path is not a directory dum dum");
+        println!("I crash now");
+    }
 
     //read directory content
     let folder_content = fs::read_dir(path).unwrap();
