@@ -4,13 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-# Some dependencies are from testing, currently not beng used in code
-# time
-# regex
-# rand
 
 [dependencies]
-time = "0.1.12"
-regex = "0.1.41"
-rand = "0.8.3"
 dialoguer = "0.10.0"

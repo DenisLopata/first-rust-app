@@ -16,6 +16,7 @@ fn main() {
     if !original_file_path.ends_with("\\") {
         original_file_path.push('\\');
     }
+
     println!("original_file_path is: {}", original_file_path);
     let path = Path::new(original_file_path.trim());
 
